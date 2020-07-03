@@ -1,0 +1,887 @@
+#include <Ethernet.h>
+#include <SPI.h>
+#include <OneWire.h>
+byte _d18x2x1Addr[8]={0x28, 0xFF, 0x3B, 0x8B, 0x72, 0x15, 0x3, 0xA0};
+
+OneWire  _ow3(3);
+byte ethernet_mac [] = {0x78, 0xAC, 0xC0, 0xBB, 0x0f, 0xFF};
+IPAddress ethernet_ip(192, 168, 1, 150);
+byte ethernet_dns [] = {8, 8, 8, 8};
+byte ethernet_gateway [] = {192, 168, 1, 1};
+byte ethernet_subnet [] = {255, 255, 255, 0};
+EthernetServer _tspWebServer(81);
+EthernetClient _tspWebServer_client;
+bool _gtv1; //Lamp 1
+bool _gtv2; //Lamp 2
+bool _gtv3; //Lamp 3
+bool _gtv4; //Lamp 4
+bool _gtv5; //Кондиционер
+bool _gtv6; //Обогреватель
+bool _gtv7; //Вентиляция
+bool _gtv8; //Сауна
+bool _gtv9; //Розетка 1
+bool _gtv10; //Розетка 2
+bool _gtv11; //Розетка 3
+bool _gtv12; //Розетка 4
+bool _gtv13; //Термостат
+bool _gtv14; //Управление замком
+int _swi9;
+bool _trgrt8 = 1;
+bool _trgrt8I = 1;
+bool _trgt4 = 1;
+bool _trgt4I = 1;
+bool _bounseInputD49S = 1;
+bool _bounseInputD49O = 1;
+unsigned long _bounseInputD49P = 0UL;
+bool _trgt14 = 1;
+bool _trgt14I = 1;
+String _swi15;
+String _swi3;
+bool _trgrt4 = 1;
+bool _trgrt4I = 1;
+bool _trgrt11 = 1;
+bool _trgrt11I = 1;
+unsigned long _d18x2x1Tti = 0UL;
+float _d18x2x1O = 0.00;
+String _swi2;
+String _swi14;
+bool _trgt10 = 1;
+bool _trgt10I = 1;
+String _swi7;
+bool _trgrt7 = 1;
+bool _trgrt7I = 1;
+String _swi20;
+bool _trgt6 = 1;
+bool _trgt6I = 1;
+bool _trgt13 = 1;
+bool _trgt13I = 1;
+bool _bounseInputD48S = 1;
+bool _bounseInputD48O = 1;
+unsigned long _bounseInputD48P = 0UL;
+bool _trgrt3 = 1;
+bool _trgrt3I = 1;
+String _swi19;
+bool _trgrt13 = 1;
+bool _trgrt13I = 1;
+bool _trgt2 = 1;
+bool _trgt2I = 1;
+String _swi4;
+String _swi11;
+bool _trgrt9 = 1;
+bool _trgrt9I = 1;
+bool _trgrt5 = 1;
+bool _trgrt5I = 1;
+bool _bounseInputD46S = 1;
+bool _bounseInputD46O = 1;
+unsigned long _bounseInputD46P = 0UL;
+String _swi16;
+bool _trgt11 = 1;
+bool _trgt11I = 1;
+bool _trgrt1 = 1;
+bool _trgrt1I = 1;
+String _swi8;
+bool _trgt7 = 1;
+bool _trgt7I = 1;
+bool _trgrt14 = 1;
+bool _trgrt14I = 1;
+bool _WSP6_A1 = 1;
+bool _WSP6_A2 = 1;
+bool _WSP6_A3 = 1;
+bool _WSP6_A4 = 1;
+bool _WSP6_A5 = 1;
+bool _WSP6_A6 = 1;
+bool _WSP6_A7 = 1;
+bool _WSP6_A8 = 1;
+bool _WSP6_A9 = 1;
+bool _WSP6_A10 = 1;
+bool _WSP6_A11 = 1;
+bool _WSP6_A12 = 1;
+bool _WSP6_A13 = 1;
+bool _WSP6_A14 = 1;
+bool _trgt3 = 1;
+bool _trgt3I = 1;
+String _swi1;
+int _swi13;
+bool _trgrt10 = 1;
+bool _trgrt10I = 1;
+String _swi5;
+String _swi12;
+bool _trgt9 = 1;
+bool _trgt9I = 1;
+bool _trgrt6 = 1;
+bool _trgrt6I = 1;
+bool _bounseInputD47S = 1;
+bool _bounseInputD47O = 1;
+unsigned long _bounseInputD47P = 0UL;
+String _swi18;
+String _swi6;
+bool _trgt5 = 1;
+bool _trgt5I = 1;
+bool _trgt12 = 1;
+bool _trgt12I = 1;
+bool _trgrt2 = 1;
+bool _trgrt2I = 1;
+String _swi17;
+bool _trgrt12 = 1;
+bool _trgrt12I = 1;
+String _swi10;
+bool _trgt1 = 1;
+bool _trgt1I = 1;
+bool _trgt8 = 1;
+bool _trgt8I = 1;
+void setup()
+{
+  Ethernet.begin(ethernet_mac, ethernet_ip, ethernet_dns, ethernet_gateway, ethernet_subnet);
+delay(1000);
+_tspWebServer.begin();
+pinMode(46, INPUT);
+digitalWrite(46, HIGH);
+pinMode(47, INPUT);
+digitalWrite(47, HIGH);
+pinMode(48, INPUT);
+digitalWrite(48, HIGH);
+pinMode(49, INPUT);
+digitalWrite(49, HIGH);
+pinMode(22, OUTPUT);
+pinMode(23, OUTPUT);
+pinMode(24, OUTPUT);
+pinMode(25, OUTPUT);
+pinMode(26, OUTPUT);
+pinMode(27, OUTPUT);
+pinMode(28, OUTPUT);
+pinMode(29, OUTPUT);
+pinMode(30, OUTPUT);
+pinMode(31, OUTPUT);
+pinMode(32, OUTPUT);
+pinMode(33, OUTPUT);
+pinMode(34, OUTPUT);
+pinMode(35, OUTPUT);
+
+_bounseInputD47O =  digitalRead(47);
+_bounseInputD49O =  digitalRead(49);
+_bounseInputD48O =  digitalRead(48);
+_bounseInputD46O =  digitalRead(46);
+}
+void loop()
+{_tspWebServer_client = _tspWebServer.available();
+if (_tspWebServer_client) {
+ boolean _WSCLineIsBlank = true;
+String _WSCReqest="";
+bool _WSCIsFirsLine=1;
+bool _WSCIsParse=0;
+int _WSCPageNumber=0;
+while (_tspWebServer_client.connected()) 
+{ while( _tspWebServer_client.available())  
+{char _tempWebServerChar = _tspWebServer_client.read(); 
+if(_WSCIsFirsLine) {_WSCReqest+= _tempWebServerChar;}
+ if (_tempWebServerChar == '\n' && _WSCLineIsBlank) {_sendWebServerPage(_WSCPageNumber); break;}
+if (_tempWebServerChar == '\n') {_WSCLineIsBlank = true; _WSCIsFirsLine=0; if (!_WSCIsParse){ _WSCPageNumber=_parseWebServerReqest(_WSCReqest); _WSCIsParse=1;} } else if (_tempWebServerChar != '\r') { _WSCLineIsBlank = false;}
+}}}
+
+bool  _bounceInputTmpD47 =  (digitalRead (47));
+
+if (_bounseInputD47S) 
+    {
+     if (millis() >= (_bounseInputD47P + 40)) 
+         {_bounseInputD47O= _bounceInputTmpD47; _bounseInputD47S=0;}
+     }
+else
+    {
+     if (_bounceInputTmpD47 != _bounseInputD47O )
+         {_bounseInputD47S=1; _bounseInputD47P = millis();} 
+      } 
+bool  _bounceInputTmpD49 =  (digitalRead (49));
+
+if (_bounseInputD49S) 
+    {
+     if (millis() >= (_bounseInputD49P + 40)) 
+         {_bounseInputD49O= _bounceInputTmpD49; _bounseInputD49S=0;}
+     }
+else
+    {
+     if (_bounceInputTmpD49 != _bounseInputD49O )
+         {_bounseInputD49S=1; _bounseInputD49P = millis();} 
+      } 
+bool  _bounceInputTmpD48 =  (digitalRead (48));
+
+if (_bounseInputD48S) 
+    {
+     if (millis() >= (_bounseInputD48P + 40)) 
+         {_bounseInputD48O= _bounceInputTmpD48; _bounseInputD48S=0;}
+     }
+else
+    {
+     if (_bounceInputTmpD48 != _bounseInputD48O )
+         {_bounseInputD48S=1; _bounseInputD48P = millis();} 
+      } 
+bool  _bounceInputTmpD46 =  (digitalRead (46));
+
+if (_bounseInputD46S) 
+    {
+     if (millis() >= (_bounseInputD46P + 40)) 
+         {_bounseInputD46O= _bounceInputTmpD46; _bounseInputD46S=0;}
+     }
+else
+    {
+     if (_bounceInputTmpD46 != _bounseInputD46O )
+         {_bounseInputD46S=1; _bounseInputD46P = millis();} 
+      } 
+
+
+
+
+//pcb:1
+//Name:alarms
+if(!(_bounseInputD46O))
+{_swi4=String("https://pbs.twimg.com/media/DPhoFK3XUAAd87b.png");} // fire active
+else
+{_swi4=String("https://pbs.twimg.com/media/DPhoAYAWkAAgOLC.png");} // fire inactive
+if(!(_bounseInputD47O))
+{_swi5=String("https://pbs.twimg.com/media/DPhoq1yWAAEY2K9.png");} // allarm on
+else
+{_swi5=String("https://pbs.twimg.com/media/DPhokJOWAAAGdan.png");} // allarm off
+if(!(_bounseInputD48O))
+{_swi1=String("https://pbs.twimg.com/media/DPhpORsW4AAyUWt.png");} // water active
+else
+{_swi1=String("https://pbs.twimg.com/media/DPhpI8ZW4AARda4.png");} // water inactive
+if(!(_bounseInputD49O))
+{_swi2=String("https://pbs.twimg.com/media/DPhpYicXUAA--jP.png");}   // gas active
+else
+{_swi2=String("https://pbs.twimg.com/media/DPhpSvDX4AAaL6X.png");}   // gas inactive
+
+//PCB:2
+//Name:Analog signal
+if(_isTimer(_d18x2x1Tti, 3000)) {
+_d18x2x1Tti = millis(); 
+_d18x2x1O=  _readDS18_ow3(_d18x2x1Addr, 0);}
+
+//PCB:3
+//Name:Server
+if(_gtv14)
+{_swi3=String("https://pbs.twimg.com/media/DPhpjhLX0AA05YW.png");}  // lock on
+else
+{_swi3=String("https://pbs.twimg.com/media/DPhpdSRXkAIMM91.png");}  // lock off
+if(_gtv13)
+{_swi6=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");}  // thermostat on
+else
+{_swi6=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");}  // thermostat off
+if(_gtv12)
+{_swi7=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");}  // socket off
+else
+{_swi7=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");}  // socket on
+if(_gtv11)
+{_swi8=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");}  // socket off
+else
+{_swi8=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");}  // socket on
+if(_gtv10)
+{_swi10=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");} // socket off
+else
+{_swi10=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");} // socket on
+if(0)
+{_swi9=0;}
+else
+{_swi9=0;}
+if(_gtv9)
+{_swi11=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");} // socket off
+else
+{_swi11=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");} // socket on
+if(0)
+{_swi13=0;}
+else
+{_swi13=0;}
+if(_gtv8)
+{_swi12=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");} // pool off
+else
+{_swi12=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");} // pool on
+if(_gtv4)
+{_swi17=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");}  // lamp off
+else
+{_swi17=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");}  // lamp on
+if(_gtv7)
+{_swi14=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");}  // off
+else
+{_swi14=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");}   // on
+if(_gtv3)
+{_swi18=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");}  // lamp off
+else
+{_swi18=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");}  // lamp on
+if(_gtv6)
+{_swi15=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");}  // off
+else
+{_swi15=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");}  // on
+if(_gtv2)
+{_swi19=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");}  // lamp off
+else
+{_swi19=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");}  // lamp on
+if(_gtv5)
+{_swi16=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");}  // air condition off
+else
+{_swi16=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");}  // air condition on
+if(_gtv1)
+{_swi20=String("https://pbs.twimg.com/media/DPhoaLsWkAE7Gaf.png");}  // lamp off
+else
+{_swi20=String("https://pbs.twimg.com/media/DPhofjRW4AAyNgO.png");}  // lamp on
+
+//Плата:4
+if (_WSP6_A1) { if (_trgrt2I) { _trgrt2 = 0;} else {_trgrt2 = 1; _trgrt2I = 1;} } else {_trgrt2 = 0; _trgrt2I = 0;}; 
+ bool  _tmp2 = _trgrt2;
+if (_tmp2)  { if (! _trgt2I) _trgt2 = ! _trgt2; } 
+_trgt2I = _tmp2; 
+if (_WSP6_A2) { if (_trgrt3I) { _trgrt3 = 0;} else {_trgrt3 = 1; _trgrt3I = 1;} } else {_trgrt3 = 0; _trgrt3I = 0;}; 
+ bool  _tmp3 = _trgrt3;
+if (_tmp3)  { if (! _trgt3I) _trgt3 = ! _trgt3; } 
+_trgt3I = _tmp3; 
+if (_WSP6_A3) { if (_trgrt4I) { _trgrt4 = 0;} else {_trgrt4 = 1; _trgrt4I = 1;} } else {_trgrt4 = 0; _trgrt4I = 0;}; 
+ bool  _tmp4 = _trgrt4;
+if (_tmp4)  { if (! _trgt4I) _trgt4 = ! _trgt4; } 
+_trgt4I = _tmp4; 
+if (_WSP6_A4) { if (_trgrt5I) { _trgrt5 = 0;} else {_trgrt5 = 1; _trgrt5I = 1;} } else {_trgrt5 = 0; _trgrt5I = 0;}; 
+ bool  _tmp5 = _trgrt5;
+if (_tmp5)  { if (! _trgt5I) _trgt5 = ! _trgt5; } 
+_trgt5I = _tmp5; 
+if (_WSP6_A5) { if (_trgrt6I) { _trgrt6 = 0;} else {_trgrt6 = 1; _trgrt6I = 1;} } else {_trgrt6 = 0; _trgrt6I = 0;}; 
+ bool  _tmp6 = _trgrt6;
+if (_tmp6)  { if (! _trgt6I) _trgt6 = ! _trgt6; } 
+_trgt6I = _tmp6; 
+if (_WSP6_A6) { if (_trgrt7I) { _trgrt7 = 0;} else {_trgrt7 = 1; _trgrt7I = 1;} } else {_trgrt7 = 0; _trgrt7I = 0;}; 
+ bool  _tmp7 = _trgrt7;
+if (_tmp7)  { if (! _trgt7I) _trgt7 = ! _trgt7; } 
+_trgt7I = _tmp7; 
+if (_WSP6_A7) { if (_trgrt8I) { _trgrt8 = 0;} else {_trgrt8 = 1; _trgrt8I = 1;} } else {_trgrt8 = 0; _trgrt8I = 0;}; 
+ bool  _tmp8 = _trgrt8;
+if (_tmp8)  { if (! _trgt8I) _trgt8 = ! _trgt8; } 
+_trgt8I = _tmp8; 
+if (_WSP6_A8) { if (_trgrt9I) { _trgrt9 = 0;} else {_trgrt9 = 1; _trgrt9I = 1;} } else {_trgrt9 = 0; _trgrt9I = 0;}; 
+ bool  _tmp9 = _trgrt9;
+if (_tmp9)  { if (! _trgt9I) _trgt9 = ! _trgt9; } 
+_trgt9I = _tmp9; 
+if (_WSP6_A9) { if (_trgrt10I) { _trgrt10 = 0;} else {_trgrt10 = 1; _trgrt10I = 1;} } else {_trgrt10 = 0; _trgrt10I = 0;}; 
+ bool  _tmp10 = _trgrt10;
+if (_tmp10)  { if (! _trgt10I) _trgt10 = ! _trgt10; } 
+_trgt10I = _tmp10; 
+if (_WSP6_A10) { if (_trgrt11I) { _trgrt11 = 0;} else {_trgrt11 = 1; _trgrt11I = 1;} } else {_trgrt11 = 0; _trgrt11I = 0;}; 
+ bool  _tmp11 = _trgrt11;
+if (_tmp11)  { if (! _trgt11I) _trgt11 = ! _trgt11; } 
+_trgt11I = _tmp11; 
+if (_WSP6_A11) { if (_trgrt12I) { _trgrt12 = 0;} else {_trgrt12 = 1; _trgrt12I = 1;} } else {_trgrt12 = 0; _trgrt12I = 0;}; 
+ bool  _tmp12 = _trgrt12;
+if (_tmp12)  { if (! _trgt12I) _trgt12 = ! _trgt12; } 
+_trgt12I = _tmp12; 
+if (_WSP6_A12) { if (_trgrt13I) { _trgrt13 = 0;} else {_trgrt13 = 1; _trgrt13I = 1;} } else {_trgrt13 = 0; _trgrt13I = 0;}; 
+ bool  _tmp13 = _trgrt13;
+if (_tmp13)  { if (! _trgt13I) _trgt13 = ! _trgt13; } 
+_trgt13I = _tmp13; 
+if (_WSP6_A13) { if (_trgrt1I) { _trgrt1 = 0;} else {_trgrt1 = 1; _trgrt1I = 1;} } else {_trgrt1 = 0; _trgrt1I = 0;}; 
+ bool  _tmp1 = _trgrt1;
+if (_tmp1)  { if (! _trgt1I) _trgt1 = ! _trgt1; } 
+_trgt1I = _tmp1; 
+if (_WSP6_A14) { if (_trgrt14I) { _trgrt14 = 0;} else {_trgrt14 = 1; _trgrt14I = 1;} } else {_trgrt14 = 0; _trgrt14I = 0;}; 
+ bool  _tmp14 = _trgrt14;
+if (_tmp14)  { if (! _trgt14I) _trgt14 = ! _trgt14; } 
+_trgt14I = _tmp14; 
+_gtv14 = _trgt2;
+digitalWrite(35, _gtv14);
+_gtv13 = _trgt3;
+digitalWrite(34, _gtv13);
+_gtv12 = _trgt4;
+digitalWrite(33, _gtv12);
+_gtv11 = _trgt5;
+digitalWrite(32, _gtv11);
+_gtv10 = _trgt6;
+digitalWrite(31, _gtv10);
+_gtv9 = _trgt7;
+digitalWrite(30, _gtv9);
+_gtv8 = _trgt8;
+digitalWrite(29, _gtv8);
+_gtv7 = _trgt9;
+digitalWrite(28, _gtv7);
+_gtv6 = _trgt10;
+digitalWrite(27, _gtv6);
+_gtv5 = _trgt11;
+digitalWrite(26, _gtv5);
+_gtv4 = _trgt12;
+digitalWrite(25, _gtv4);
+_gtv3 = _trgt13;
+digitalWrite(24, _gtv3);
+_gtv2 = _trgt1;
+digitalWrite(23, _gtv2);
+_gtv1 = _trgt14;
+digitalWrite(22, _gtv1);
+
+
+
+
+}
+bool _isTimer(unsigned long startTime, unsigned long period )
+  {
+  unsigned long currentTime;
+currentTime = millis();
+if (currentTime>= startTime) {return (currentTime>=(startTime + period));} else {return (currentTime >=(4294967295-startTime+period));}
+  }
+float _convertDS18x2xData(byte type_s, byte data[12])
+{
+  int16_t raw = (data[1] << 8) | data[0];
+  if (type_s) 
+  {
+  raw = raw << 3; 
+  if (data[7] == 0x10) { raw = (raw & 0xFFF0) + 12 - data[6]; }
+  }
+else 
+  {
+   byte cfg = (data[4] & 0x60);
+   if (cfg == 0x00) raw = raw & ~7;   else if (cfg == 0x20) raw = raw & ~3;  else if (cfg == 0x40) raw = raw & ~1;
+  }
+return  (float)raw / 16.0;
+}
+float _readDS18_ow3(byte addr[8], byte type_s)
+{  byte data[12];
+byte i;
+_ow3.reset();
+_ow3.select(addr);
+_ow3.write(0xBE);
+for ( i = 0; i < 9; i++) {
+ data[i] = _ow3.read();}
+_ow3.reset();
+_ow3.select(addr);
+_ow3.write(0x44, 1);
+return _convertDS18x2xData(type_s, data);}void _sendWebServerPage(int sendPageNumber)
+{_tspWebServer_client.println("HTTP/1.1 200 OK");
+_tspWebServer_client.println("Connection: close");  
+_tspWebServer_client.println();
+_tspWebServer_client.println("<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.01 Transitional//EN"">");
+_tspWebServer_client.println("<html><head>");
+_tspWebServer_client.println("<META content=""text/html; charset=utf-8"" http-equiv=""Content-Type"">");
+_tspWebServer_client.println("</head><body>");
+if (sendPageNumber ==1) {_sendWebServerPage1();}
+if (sendPageNumber ==2) {_sendWebServerPage2();}
+if (sendPageNumber ==3) {_sendWebServerPage3();}
+if (sendPageNumber ==4) {_sendWebServerPage4();}
+if (sendPageNumber ==5) {_sendWebServerPage5();}
+if (sendPageNumber ==6) {_sendWebServerPage6();}
+_tspWebServer_client.println("</body></html>");
+ delay(1); _tspWebServer_client.stop();}
+int _parseWebServerReqest(String reqestAddres)
+{
+int index;
+int result=0;
+index=reqestAddres.indexOf("/");
+  reqestAddres =_stringWithoutCharWithIndex(reqestAddres,0,(index));
+index=reqestAddres.indexOf(" ");
+reqestAddres =_stringWithoutCharWithIndex(reqestAddres,index,(reqestAddres.length()-index));
+if (reqestAddres=="signalizacii"){result= 1;}
+if (reqestAddres=="acp"){result= 2;}
+if (reqestAddres=="termostat"){result= 3;}
+if (reqestAddres=="temperatura"){result= 4;}
+if (reqestAddres==""){result= 5;}
+if (reqestAddres=="14"){_WSP6_A1=1; result= 6;} else {_WSP6_A1=0;} 
+if (reqestAddres=="13"){_WSP6_A2=1; result= 6;} else {_WSP6_A2=0;} 
+if (reqestAddres=="12"){_WSP6_A3=1; result= 6;} else {_WSP6_A3=0;} 
+if (reqestAddres=="11"){_WSP6_A4=1; result= 6;} else {_WSP6_A4=0;} 
+if (reqestAddres=="10"){_WSP6_A5=1; result= 6;} else {_WSP6_A5=0;} 
+if (reqestAddres=="9"){_WSP6_A6=1; result= 6;} else {_WSP6_A6=0;} 
+if (reqestAddres=="8"){_WSP6_A7=1; result= 6;} else {_WSP6_A7=0;} 
+if (reqestAddres=="7"){_WSP6_A8=1; result= 6;} else {_WSP6_A8=0;} 
+if (reqestAddres=="6"){_WSP6_A9=1; result= 6;} else {_WSP6_A9=0;} 
+if (reqestAddres=="5"){_WSP6_A10=1; result= 6;} else {_WSP6_A10=0;} 
+if (reqestAddres=="4"){_WSP6_A11=1; result= 6;} else {_WSP6_A11=0;} 
+if (reqestAddres=="3"){_WSP6_A12=1; result= 6;} else {_WSP6_A12=0;} 
+if (reqestAddres=="2"){_WSP6_A13=1; result= 6;} else {_WSP6_A13=0;} 
+if (reqestAddres=="1"){_WSP6_A14=1; result= 6;} else {_WSP6_A14=0;} 
+return result;
+}
+String _stringWithoutCharWithIndex(String value, int index,int count)
+  {
+    String result="";
+    for (int i=0; i <= value.length(); i++){ 
+      if((i<index) ||(i>(index+count))){
+        result+=value.charAt(i);
+      }
+    } 
+    return result; 
+  }
+
+
+void _sendWebServerPage1(void)
+{
+_tspWebServer_client.println("<meta http-equiv=""Refresh"" content=""10"" />");
+_tspWebServer_client.println("<table width=""100%"" cellspacing=""0"" cellpadding=""10"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<tr>");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""""><img src=""");
+
+_tspWebServer_client.println(_swi4);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Fire sensor</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""""><img src=""");
+
+_tspWebServer_client.println(_swi5);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Breaking sensor</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""""><img src=""");
+
+_tspWebServer_client.println(_swi1);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Water sensor</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""""><img src=""");
+
+_tspWebServer_client.println(_swi2);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Gas sensor</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</tr>");
+_tspWebServer_client.println("</table>");
+
+}void _sendWebServerPage2(void)
+{
+_tspWebServer_client.println("<meta http-equiv=""Refresh"" content=""3"" />");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""5"" face=""Open Sans"">");
+
+_tspWebServer_client.println(( (analogRead (5)))*(0.0049));
+_tspWebServer_client.println("</font></p>");
+
+}void _sendWebServerPage3(void)
+{
+_tspWebServer_client.println("<meta http-equiv=""Refresh"" content=""3"" />");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""5"" face=""Open Sans"">");
+
+_tspWebServer_client.println((_d18x2x1O));
+_tspWebServer_client.println("</font></p>");
+
+}void _sendWebServerPage4(void)
+{
+_tspWebServer_client.println("<meta http-equiv=""Refresh"" content=""3"" />");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""5"" face=""Open Sans"">");
+
+_tspWebServer_client.println((_d18x2x1O));
+_tspWebServer_client.println("</font></p>");
+
+}void _sendWebServerPage5(void)
+{
+_tspWebServer_client.println("<table width=""100%"" height=""100%"" cellspacing=""0"" cellpadding=""0"" border=""0"" bgcolor=""1d2228"">");
+_tspWebServer_client.println("<tr>");
+_tspWebServer_client.println("<td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<table width=""100%"" align=""center"" border=""1"" cellspacing=""0"" cellpadding=""20"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<tr>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td bgcolor=""212121"" width=""100%"" valign=""top"" colspan=""2"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<table width=""100%"" bgcolor=""212121"" cellspacing=""0"" cellpadding=""0"">");
+_tspWebServer_client.println("<tr>");
+_tspWebServer_client.println("<td bgcolor=""212121"" width=""12%"" valign=""top"">");
+_tspWebServer_client.println("<img src=""https://pbs.twimg.com/media/EZSAkU-XkAI3vW7?format=png&name=240x240"">");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("<td bgcolor=""212121"" width=""48%"" valign=""top"">");
+_tspWebServer_client.println("<h3 align= ""left""><font color=""FFFFFF"" size=""20"" face=""Open Sans"">");
+_tspWebServer_client.println("SMART RELAY </font></h3>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""5"" face=""Open Sans"">IP http://91.239.11.5:81/</font></p>");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("</tr>");
+_tspWebServer_client.println("</table>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td bgcolor=""212121"" width=""40%"" valign=""middle"">");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""4"" face=""Open Sans"">Link Incolor - Releu inactiv. </font></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""4"" face=""Open Sans"">Link Color - Releu activ.</font></p>");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("</tr>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<tr>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td width=""60%"" valign=""top"" colspan=""2"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""5"" face=""Open Sans"">Relay control 3</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<table width=""100%"" cellspacing=""0"" cellpadding=""20"">");
+_tspWebServer_client.println("<tr>");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/1""><img src=""");
+
+_tspWebServer_client.println(_swi20);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 12</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/2""><img src=""");
+
+_tspWebServer_client.println(_swi19);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 11</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/3""><img src=""");
+
+_tspWebServer_client.println(_swi18);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 10</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/4""><img src=""");
+
+_tspWebServer_client.println(_swi17);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 9</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</tr>");
+_tspWebServer_client.println("</table>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<hr>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""5"" face=""Open Sans"">Relay Control 2</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<table width=""100%"" cellspacing=""0"" cellpadding=""20"">");
+_tspWebServer_client.println("<tr>");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/5""><img src=""");
+
+_tspWebServer_client.println(_swi16);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 7</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/6""><img src=""");
+
+_tspWebServer_client.println(_swi15);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 6</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/7""><img src=""");
+
+_tspWebServer_client.println(_swi14);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 5</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/8""><img src=""");
+
+_tspWebServer_client.println(_swi12);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 8</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</tr>");
+_tspWebServer_client.println("</table>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<hr>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""5"" face=""Open Sans"">Relay Control 1</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<table width=""100%"" cellspacing=""0"" cellpadding=""20"">");
+_tspWebServer_client.println("<tr>");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/9""><img src=""");
+
+_tspWebServer_client.println(_swi11);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 1</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/10""><img src=""");
+
+_tspWebServer_client.println(_swi10);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 2</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/11""><img src=""");
+
+_tspWebServer_client.println(_swi8);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 3</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td align=""center"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><a href=""/12""><img src=""");
+
+_tspWebServer_client.println(_swi7);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Relay 4</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</tr>");
+_tspWebServer_client.println("</table>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<td width=""40%"" valign=""top"">");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""6"" face=""Open Sans"">Home Alarm</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<iframe src=""signalizacii"" width=""420"" height=""120"" scrolling=""no"" frameborder=""no""></iframe>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p align=""center""><a href=""/14""><img src=""");
+
+_tspWebServer_client.println(_swi3);
+_tspWebServer_client.println("""></a></p>");
+_tspWebServer_client.println("<p align=""center""><font color=""FFFFFF"" size=""3"" face=""Open Sans"">Lock control</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<hr>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""4"" face=""Open Sans"">Temperature:</font></p>");
+_tspWebServer_client.println("<p><img src=""https://user-images.githubusercontent.com/65172880/83336886-f8c6aa80-a2ae-11ea-9595-c0a80ba38cf8.png"" align=""left""><font color=""FFFFFF"" size=""6"" face=""Open Sans"">&nbsp;&nbsp; ");
+_tspWebServer_client.println("<iframe src=""temperatura"" width=""80"" height=""40"" scrolling=""no"" frameborder=""no""></iframe> &#8451;</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""4"" face=""Open Sans"">Thermostat:</font></p>");
+_tspWebServer_client.println("<p><a href=""/13""><img src=""");
+
+_tspWebServer_client.println(_swi6);
+_tspWebServer_client.println(""" align=""left""></a><font color=""FFFFFF"" size=""6"" face=""Open Sans"">&nbsp;&nbsp; ");
+_tspWebServer_client.println("<iframe src=""termostat"" width=""80"" height=""40"" scrolling=""no"" frameborder=""no""></iframe> &#8451;</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<p><font color=""FFFFFF"" size=""4"" face=""Open Sans"">DC Channels:</font></p>");
+_tspWebServer_client.println("<p><img src=""https://user-images.githubusercontent.com/65172880/83336929-36c3ce80-a2af-11ea-85ee-454b8b6ae5cb.png"" align=""left""><font color=""FFFFFF"" size=""6"" face=""Open Sans"">&nbsp;&nbsp; ");
+_tspWebServer_client.println("<iframe src=""acp"" width=""80"" height=""40"" scrolling=""no"" frameborder=""no""></iframe> V</font></p>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</tr>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("<tr>");
+_tspWebServer_client.println("<td bgcolor=""212121"" colspan=""3"">");
+_tspWebServer_client.println("<p align=""center""><font color=""FFFFFF"" face=""Open Sans"">2020 Smart House systems, </font><a href=""https://stratencoiurie.com"" target=""blank""><font color=""FFFFFF"" face=""Open Sans"">Developed by</font></a></p>");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("</tr>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</table>");
+_tspWebServer_client.println("");
+_tspWebServer_client.println("</td>");
+_tspWebServer_client.println("</tr>");
+_tspWebServer_client.println("</table>");
+_tspWebServer_client.println("");
+
+}void _sendWebServerPage6(void)
+{
+_tspWebServer_client.println("<meta http-equiv=""refresh"" content=""0;URL=http://192.168.178.151:81"">");
+
+}
